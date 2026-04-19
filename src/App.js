@@ -1,39 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { auth } from './authService';
+import Login from './components/Login';
 import { processTask } from './AiAgent';
+import './assets/glitch-effect.css';
 
 function App() {
+  const [user, setUser] = useState(null);
   const [input, setInput] = useState("");
-  const [response, setResponse] = useState("Standing by, Commander...");
+  const [response, setResponse] = useState("Awaiting commands...");
+
+  // चेक करें कि यूजर पहले से लॉग-इन है या नहीं
+  useEffect(() => {
+    auth.onAuthStateChanged((u) => { if (u) setUser(u); });
+  }, []);
+
+  if (!user) return <Login setUser={setUser} />;
 
   const handleAction = async () => {
-    setResponse("AI is thinking...");
-    const aiResponse = await processTask(input, "user_007");
+    setResponse(">> ACCESSING GEMINI_CORE...");
+    const aiResponse = await processTask(input, user.uid);
     setResponse(aiResponse);
+    setInput("");
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.glowText}>GHOST AI SYSTEM</h1>
-      <div style={styles.terminal}>
+    <div className="container">
+      <header style={{width: '80%', display: 'flex', justifyContent: 'space-between'}}>
+        <span className="glow-text">LOGGED_IN: {user.displayName}</span>
+        <button onClick={() => auth.signOut().then(()=>setUser(null))} className="execute-btn" style={{height: '30px', padding: '5px'}}>LOGOUT</button>
+      </header>
+      
+      <div className="terminal">
+        <p style={{color: '#555'}}>-- SYSTEM LOG v2.0.26 --</p>
         <p>{response}</p>
       </div>
-      <input 
-        style={styles.input}
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Command your AI..."
-      />
-      <button onClick={handleAction} style={styles.button}>EXECUTE</button>
+
+      <div style={{width: '80%', display: 'flex'}}>
+        <input 
+          className="cyber-input"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Enter root command..."
+          onKeyPress={(e) => e.key === 'Enter' && handleAction()}
+        />
+        <button onClick={handleAction} className="execute-btn">EXECUTE</button>
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: { backgroundColor: '#0a0a0a', color: '#00ff41', height: '100vh', padding: '50px', fontFamily: 'Courier New' },
-  glowText: { textAlign: 'center', textShadow: '0 0 10px #00ff41' },
-  terminal: { border: '1px solid #00ff41', padding: '20px', height: '300px', marginBottom: '20px', overflowY: 'scroll' },
-  input: { width: '80%', padding: '10px', background: 'transparent', border: '1px solid #00ff41', color: '#00ff41' },
-  button: { padding: '10px 20px', marginLeft: '10px', cursor: 'pointer', backgroundColor: '#00ff41', color: 'black', border: 'none', fontWeight: 'bold' }
-};
 
 export default App;
