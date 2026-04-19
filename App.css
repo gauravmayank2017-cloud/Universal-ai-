@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  background-color: #050505;
+  overflow: hidden;
+  font-family: 'Fira Code', 'Courier New', monospace;
+}
+
+/* मुख्य कंटेनर का ग्लो इफेक्ट */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  border: 2px solid #00f3ff;
+  box-shadow: inset 0 0 50px #00f3ff22;
+  background: radial-gradient(circle, #0a1a1a 0%, #050505 100%);
+}
+
+/* Neon Text Animation */
+.glow-text {
+  color: #00f3ff;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-shadow: 0 0 10px #00f3ff, 0 0 20px #00f3ff;
+  animation: flicker 2s infinite;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 24%, 55% { opacity: 0.5; }
+}
+
+/* Terminal Window */
+.terminal {
+  width: 80%;
+  height: 400px;
+  background: rgba(0, 0, 0, 0.8);
+  border-left: 4px solid #00f3ff;
+  padding: 20px;
+  color: #00f3ff;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+  margin-bottom: 30px;
+}
+
+/* Input Box */
+.cyber-input {
+  width: 60%;
+  padding: 15px;
+  background: transparent;
+  border: 1px solid #00f3ff;
+  color: #00f3ff;
+  outline: none;
+  font-size: 1.2rem;
+  transition: 0.3s;
+}
+
+.cyber-input:focus {
+  box-shadow: 0 0 15px #00f3ff;
+  background: rgba(0, 243, 255, 0.05);
+}
+
+/* Button */
+.execute-btn {
+  padding: 15px 30px;
+  margin-left: 10px;
+  background: #00f3ff;
+  color: #000;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  transition: 0.3s;
+}
+
+.execute-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #00f3ff;
+}
